@@ -42,6 +42,14 @@ class App extends Component {
     });
   }
 
+  generatePageNumbers = (data, itemsPerPage) => {
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(data.length / itemsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+    return pageNumbers;
+  }
+
   componentWillMount = () => {
     axios.get('https://intellipharm.com.au/devtest/index.php')
       .then((response) => (
@@ -70,17 +78,17 @@ class App extends Component {
             </tr>;
     });
 
-    const pageNumbers = [];
+    const pageNumbers = this.generatePageNumbers(filteredData === null ? apiData : filteredData, itemsPerPage);
 
-    if (filteredData === null) {
-      for (let i = 1; i <= Math.ceil(apiData.length / itemsPerPage); i++) {
-        pageNumbers.push(i);
-      }
-    } else {
-       for (let i = 1; i <= Math.ceil(filteredData.length / itemsPerPage); i++) {
-        pageNumbers.push(i);
-      }
-    }
+    // if (filteredData === null) {
+    //   for (let i = 1; i <= Math.ceil(apiData.length / itemsPerPage); i++) {
+    //     pageNumbers.push(i);
+    //   }
+    // } else {
+    //    for (let i = 1; i <= Math.ceil(filteredData.length / itemsPerPage); i++) {
+    //     pageNumbers.push(i);
+    //   }
+    // }
 
     const renderPageNumbers = pageNumbers.map(number => {
       return (
