@@ -28,8 +28,6 @@ class App extends Component {
         ? element.firstname : null
     });
 
-    console.log(dataFiltered);
-
     this.setState({ filteredData: dataFiltered });
   }
 
@@ -41,19 +39,6 @@ class App extends Component {
   handleClick = (event) => {
     this.setState({
       currentPage: Number(event.target.id)
-    });
-  }
-
-  getDataFiltered = (data) => {
-    axios.get('https://intellipharm.com.au/devtest/index.php', { params: {
-      firstname: "Reggy",
-    }
-  })
-    .then(function (response) {
-      console.log(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
     });
   }
 
@@ -70,14 +55,11 @@ class App extends Component {
 
   render() {
 
-    // console.log(this.state.apiData);
-
     const { apiData, currentPage, itemsPerPage, filteredData } = this.state;
-
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData === null ? apiData.slice(indexOfFirstItem, indexOfLastItem) : filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
+    
     const renderItems = currentItems.map((item) => {
       return <tr key={item.id}>
               <td>{item.firstname}</td>
@@ -95,7 +77,7 @@ class App extends Component {
         pageNumbers.push(i);
       }
     } else {
-       for (let i = 1; i <= Math.ceil(apiData.length / itemsPerPage); i++) {
+       for (let i = 1; i <= Math.ceil(filteredData.length / itemsPerPage); i++) {
         pageNumbers.push(i);
       }
     }
