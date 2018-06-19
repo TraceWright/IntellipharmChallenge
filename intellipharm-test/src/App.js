@@ -7,6 +7,7 @@ class App extends Component {
     super(props);
       this.state = {
         apiData: [],
+        filteredData: null,
         currentPage: 1,
         itemsPerPage: 100,
         inputText: '',
@@ -18,7 +19,7 @@ class App extends Component {
     const searchString = new RegExp(targetValue, 'g')
     const searchStringCapitalised = targetValue.charAt(0).toUpperCase()  + targetValue.slice(1);
     
-    const result = data.filter((element) => {
+    const dataFiltered = data.filter((element) => {
       return element.firstname.match(searchStringCapitalised) !== null
         || element.firstname.match(searchString) !== null
         || element.surname.match(searchStringCapitalised) !== null
@@ -27,13 +28,13 @@ class App extends Component {
         ? element.firstname : null
     });
 
-    console.log(result);
+    console.log(dataFiltered);
+
+    this.setState({ filteredData: dataFiltered });
   }
 
   handleTextChange = (event) => {
     this.setState({ inputText: event.target.value });
-
-
     this.filterApiData(this.state.apiData, event.target.value);
   }
 
@@ -71,11 +72,11 @@ class App extends Component {
 
     // console.log(this.state.apiData);
 
-    const { apiData, currentPage, itemsPerPage } = this.state;
+    const { apiData, currentPage, itemsPerPage, filteredData } = this.state;
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = apiData.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = filteredData === null ? apiData.slice(indexOfFirstItem, indexOfLastItem) : filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
     const renderItems = currentItems.map((item) => {
       return <tr key={item.id}>
@@ -88,21 +89,28 @@ class App extends Component {
     });
 
     const pageNumbers = [];
+
+    if (filteredData === null) {
       for (let i = 1; i <= Math.ceil(apiData.length / itemsPerPage); i++) {
         pageNumbers.push(i);
       }
+    } else {
+       for (let i = 1; i <= Math.ceil(apiData.length / itemsPerPage); i++) {
+        pageNumbers.push(i);
+      }
+    }
 
-      const renderPageNumbers = pageNumbers.map(number => {
-        return (
-          <li
-            key={number}
-            id={number}
-            onClick={this.handleClick}
-          >
-            {number}
-          </li>
-        );
-      });
+    const renderPageNumbers = pageNumbers.map(number => {
+      return (
+        <li
+          key={number}
+          id={number}
+          onClick={this.handleClick}
+        >
+          {number}
+        </li>
+      );
+    });
 
     return (
       <div className="App">
