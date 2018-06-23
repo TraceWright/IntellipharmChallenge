@@ -34,8 +34,6 @@ class App extends Component {
         ? element.firstname : null
     });
 
-    console.log(dataFiltered)
-
     this.setState({ filteredData: dataFiltered });
     this.setState({ graphData: this.signupsPerYear(dataFiltered) })
   }
@@ -44,7 +42,6 @@ class App extends Component {
     this.resetGraphTableData(e.target.value);
   }
   resetGraphTableData(value) {
-    console.log(value)
     this.filterApiData(this.state.apiData, value);
   }
 
@@ -145,12 +142,12 @@ class App extends Component {
         </div>
 
         <div className="graph-area">
-          <HorizontalBar 
+          <HorizontalBar
             data={{
               labels: this.state.graphData !== null ? Object.keys(this.state.graphData) : [],
               datasets: [
               {
-                label: 'Signup Year (count)',
+                label: 'Signups per Year',
                 backgroundColor: randomColor(),
                 borderColor: randomColor(),
                 borderWidth: 1,
@@ -159,8 +156,8 @@ class App extends Component {
                 data: this.state.graphData !== null ? Object.values(this.state.graphData) : []
               }
             ]}}
-           height={500}
-           options={{
+            height={500}
+            options={{
             maintainAspectRatio: false
         }}
           />

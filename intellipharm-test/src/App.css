@@ -32,20 +32,13 @@
 }
 
 input {
-  margin-bottom: 5px;
-  border-top-width: 2px;
-  border-left-width: 2px;
-  display: block;
   width: 120px;
   padding: 0.75rem 1rem;
   font-size: 1rem;
   line-height: 1.5;
   color: #495057;
-  background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ced4da;
-  border-radius: 0;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -54,7 +47,6 @@ input {
   width: 100%;
   border-collapse: collapse;
   border: 3px solid rgb(8, 167, 154);
-  /* padding: 50px 50px 50px 50px; */
 }
 
 th, td {
