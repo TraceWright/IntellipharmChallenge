@@ -35,8 +35,8 @@ class App extends Component {
     });
 
     this.setState({ filteredData: dataFiltered });
-    console.log(dataFiltered);
-    console.log(this.signupsPerYear(dataFiltered));
+    // console.log(dataFiltered);
+    // console.log(this.signupsPerYear(dataFiltered));
     this.setState({ graphData: this.signupsPerYear(dataFiltered) })
   }
 
@@ -100,20 +100,25 @@ class App extends Component {
 
   render() {
 
+    
+
     const stackedObject = {
-      1: {data: [], label: 'January', backgroundColor: randomColor()},
-      2: {data: [], label: 'February', backgroundColor: randomColor()},
-      3: {data: [], label: 'March', backgroundColor: randomColor()},
-      4: {data: [], label: 'April', backgroundColor: randomColor()},
-      5: {data: [], label: 'May', backgroundColor: randomColor()},
-      6: {data: [], label: 'June', backgroundColor: randomColor()},
-      7: {data: [], label: 'July', backgroundColor: randomColor()},
-      8: {data: [], label: 'August', backgroundColor: randomColor()},
-      9: {data: [], label: 'September', backgroundColor: randomColor()},
-      10:{data: [], label: 'October', backgroundColor: randomColor()},
-      11:{data: [], label: 'November', backgroundColor: randomColor()},
-      12:{data: [], label: 'December', backgroundColor: randomColor()},
+      1: {data: [], label: 'January', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      2: {data: [], label: 'February', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      3: {data: [], label: 'March', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      4: {data: [], label: 'April', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      5: {data: [], label: 'May', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      6: {data: [], label: 'June', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      7: {data: [], label: 'July', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      8: {data: [], label: 'August', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      9: {data: [], label: 'September', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      10:{data: [], label: 'October', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      11:{data: [], label: 'November', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
+      12:{data: [], label: 'December', backgroundColor: randomColor(), hoverBorderColor: randomColor(),},
     }
+
+
+
 
     this.state.graphData ?
     Object.keys(this.state.graphData).map(yearKey => (
@@ -181,15 +186,11 @@ class App extends Component {
             data={{
               labels: this.state.graphData !== null ? Object.keys(this.state.graphData) : [],
     
-          datasets: Object.keys(stackedObject).map(monthKey =>
-              stackedObject[monthKey]
-          )
-
-
-
-          }}
-            log={console.log(this.state.graphData !== null ? this.state.graphData : [])}
+            datasets: Object.keys(stackedObject).map(monthKey =>
+                stackedObject[monthKey]
+            )}}
             height={500}
+            width={window.innerWidth - 100}
             options={{
               maintainAspectRatio: false,
               responsive: false,
