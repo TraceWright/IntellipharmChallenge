@@ -35,6 +35,8 @@ class App extends Component {
     });
 
     this.setState({ filteredData: dataFiltered });
+    console.log(dataFiltered);
+    console.log(this.signupsPerYear(dataFiltered));
     this.setState({ graphData: this.signupsPerYear(dataFiltered) })
   }
 
@@ -76,17 +78,50 @@ class App extends Component {
 
   signupsPerYear = (data) => {
     let signPerYr = {};
-    data.map(element => (
-      !!signPerYr[new Date(Date.parse(element.joined_date)).getFullYear()] === true
-      ? signPerYr[new Date(Date.parse(element.joined_date)).getFullYear()] = signPerYr[new Date(Date.parse(element.joined_date)).getFullYear()] + 1
-      : signPerYr[new Date(Date.parse(element.joined_date)).getFullYear()] = 1
-    ));
+
+    data.forEach(element => {
+      const month = new Date(Date.parse(element.joined_date)).getMonth() + 1;
+      const year = new Date(Date.parse(element.joined_date)).getFullYear();
+      if (!!signPerYr[year] === false) {
+
+        signPerYr[year] = { 
+          year: 1, 
+          months: {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0 }
+        }
+        signPerYr[year].months[month] = 1;
+      } else {
+        signPerYr[year].year = signPerYr[year].year + 1;
+        signPerYr[year].months[month] = signPerYr[year].months[month] + 1;
+      }
+    });
+
     return signPerYr;
   }
 
   render() {
 
+    const stackedObject = {
+      1: {data: [], label: 'January', backgroundColor: randomColor()},
+      2: {data: [], label: 'February', backgroundColor: randomColor()},
+      3: {data: [], label: 'March', backgroundColor: randomColor()},
+      4: {data: [], label: 'April', backgroundColor: randomColor()},
+      5: {data: [], label: 'May', backgroundColor: randomColor()},
+      6: {data: [], label: 'June', backgroundColor: randomColor()},
+      7: {data: [], label: 'July', backgroundColor: randomColor()},
+      8: {data: [], label: 'August', backgroundColor: randomColor()},
+      9: {data: [], label: 'September', backgroundColor: randomColor()},
+      10:{data: [], label: 'October', backgroundColor: randomColor()},
+      11:{data: [], label: 'November', backgroundColor: randomColor()},
+      12:{data: [], label: 'December', backgroundColor: randomColor()},
+    }
 
+    this.state.graphData ?
+    Object.keys(this.state.graphData).map(yearKey => (
+           Object.keys(this.state.graphData[yearKey].months).map(monthKey => (
+              stackedObject[monthKey].data.push(this.state.graphData[yearKey].months[monthKey])
+          ))
+    ))
+    : [];
 
     const { apiData, currentPage, itemsPerPage, filteredData } = this.state;
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -145,21 +180,31 @@ class App extends Component {
           <HorizontalBar
             data={{
               labels: this.state.graphData !== null ? Object.keys(this.state.graphData) : [],
-              datasets: [
-              {
-                label: 'Signups per Year',
-                backgroundColor: randomColor(),
-                borderColor: randomColor(),
-                borderWidth: 1,
-                hoverBackgroundColor: randomColor(),
-                hoverBorderColor: randomColor(),
-                data: this.state.graphData !== null ? Object.values(this.state.graphData) : []
-              }
-            ]}}
+    
+          datasets: Object.keys(stackedObject).map(monthKey =>
+              stackedObject[monthKey]
+          )
+
+
+
+          }}
+            log={console.log(this.state.graphData !== null ? this.state.graphData : [])}
             height={500}
             options={{
-            maintainAspectRatio: false
-        }}
+              maintainAspectRatio: false,
+              responsive: false,
+              legend: {
+                position: 'right'
+              },
+              scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
+              }
+            }}
           />
         </div>
 
